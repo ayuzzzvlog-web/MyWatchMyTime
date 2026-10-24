@@ -30,6 +30,7 @@ export function EnquiryDialog({
   const { push } = useToast();
   const [type, setType] = useState<InquiryType>(initialType);
   const [form, setForm] = useState({ name: '', phone: '', email: '', message: '' });
+  const [preferred, setPreferred] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
@@ -60,18 +61,27 @@ export function EnquiryDialog({
 
     setSubmitting(true);
     try {
+      const note = form.message.trim();
+      const when = preferred
+        ? `\n\nPreferred appointment: ${new Date(preferred).toLocaleString('en-IN', {
+            dateStyle: 'full',
+            timeStyle: 'short',
+          })}`
+        : '';
+      const base =
+        note ||
+        (watch
+          ? `I'd like to know more about the ${watch.brand} ${watch.name} (${watch.reference}).`
+          : '');
       await api.createInquiry({
         ...form,
+        message: `${base}${when}`.trim(),
         type,
         watchId: watch?.id ?? null,
-        message:
-          form.message ||
-          (watch
-            ? `I'd like to know more about the ${watch.brand} ${watch.name} (${watch.reference}).`
-            : ''),
       });
       setDone(true);
       setForm({ name: '', phone: '', email: '', message: '' });
+      setPreferred('');
       push({ title: 'Enquiry sent', description: 'We reply within one working day.', tone: 'success' });
     } catch (error) {
       const message = error instanceof ApiError ? error.message : 'Could not send your enquiry';
@@ -171,6 +181,18 @@ export function EnquiryDialog({
                 autoComplete="email"
               />
             </Field>
+
+            {type === 'viewing' && (
+              <Field label="Preferred date & time" optional hint="We confirm by phone">
+                <Input
+                  type="datetime-local"
+                  value={preferred}
+                  onChange={(e) => setPreferred(e.target.value)}
+                  min={new Date().toISOString().slice(0, 16)}
+                  className="[color-scheme:dark]"
+                />
+              </Field>
+            )}
 
             <Field label="Message" optional>
               <Textarea

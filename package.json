@@ -56,5 +56,17 @@
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vite": "^8.3.5"
+  },
+  "description": "Unique Trendz — a premium, full-stack watch catalogue website with a private curator dashboard for adding watches, photographs, prices and enquiries.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "watch-catalogue",
+    "luxury",
+    "react",
+    "express",
+    "tailwind"
+  ],
+  "engines": {
+    "node": ">=20"
   }
 }
