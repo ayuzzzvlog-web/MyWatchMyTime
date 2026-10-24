@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# builds
+dist/
+dist-server/
+*.tsbuildinfo
+
+# runtime data (catalogue database + uploaded images)
+data/
+!data/.gitkeep
+
+# environment
+.env
+.env.local
+.env.*.local
+
+# logs / editor / OS
+*.log
+npm-debug.log*
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+coverage/
